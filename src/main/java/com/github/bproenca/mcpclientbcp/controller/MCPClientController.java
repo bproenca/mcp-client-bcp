@@ -1,0 +1,22 @@
+package com.github.bproenca.mcpclientbcp.controller;
+
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api")
+public class MCPClientController {
+
+    private  final ChatClient chatClient;
+
+    public MCPClientController(ChatClient.Builder chatClientBuilder) {
+        this.chatClient = chatClientBuilder.defaultAdvisors(new SimpleLoggerAdvisor()).build();
+    }
+
+    @GetMapping("/chat")
+    public String chat(@RequestParam("message") String message) {
+        return chatClient.prompt().user(message).call().content();
+    }
+
+}
